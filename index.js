@@ -45,7 +45,7 @@ app.get('/', async (req, res) => {
             })
             res.status(500).send("try again with the ip "+String(err).split("by the login. Client with IP address ")[1].split(" is not allowed to access the server.  To enable access")[0]);
           } else {
-               console.error('----- Got a connection error ', err,' -------');
+               console.error('---- Got a connection error ', err,' ------');
                 res.status(500).send('----- Got a connection error \n\n', err);
           }
         } else {
