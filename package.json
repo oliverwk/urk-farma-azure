@@ -1,0 +1,28 @@
+{
+  "name": "node-js-urk-frama-rest-api",
+  "version": "0.3.0",
+  "description": "A restful Node.js api using for the urk-frama project",
+  "engines": {
+    "node": "12.x"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "node-fetch": "^2.6.0",
+    "tedious": "^9.2.1"
+  },
+  "devDependencies": {
+    "got": "^11.3.0",
+    "tape": "^4.7.0"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "urk"
+  ],
+  "license": "MIT"
+}
