@@ -10,10 +10,6 @@
     "express": "^4.15.2",
     "tedious": "^9.2.1"
   },
-  "devDependencies": {
-    "got": "^11.8.0",
-    "tape": "^4.7.0"
-  },
   "keywords": [
     "node",
     "api",
