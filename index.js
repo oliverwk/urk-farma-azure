@@ -88,6 +88,8 @@ app.get('/api/urk/top', async (req, res) => {
         function complete(rowCount, more) {
            console.log("complete, alles van sql server is binnen en de .on(row) function is dus ook klaar en nu stuur ik dit: ");
            console.log(String(data)+"]");
+           res.header('Access-Control-Allow-Origin','*');
+           res.header('Content-Type','application/json');
            res.status(200).send(String(data)+"]");
          }
 
@@ -154,11 +156,16 @@ app.get('/api/urk/name', async (req, res) => {
         function complete(rowCount, more) {
            console.log("complete, alles van sql server is binnen en de .on(row) function is dus ook klaar en nu stuur ik dit: ");
            console.log(String(data)+"]");
+           res.header('Access-Control-Allow-Origin','*');
+           res.header('Content-Type','application/json');
            res.status(200).send(String(data)+"]");
          }
 
        connection.execSql(request);
 })
+
+app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 2.0}") })
+app.get('/api/urk/status', (req, res) => { res.status(200).send("{\"status\": 200}") })
 app.listen(process.env.PORT, () => {
   console.log(`Urk API listening at http://localhost:${process.env.PORT}`)
 })
