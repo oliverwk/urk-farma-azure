@@ -1,7 +1,7 @@
 echo "# urk-farma-azure" >> README.md
 git init
 git add .
-git commit -m "first commit"
-git branch -M master
+git commit -m "second commit"
+git branch -M VersionTwo
 git remote add origin https://github.com/oliverwk/urk-farma-azure.git
-git push -u origin master
+git push -u origin VersionTwo
