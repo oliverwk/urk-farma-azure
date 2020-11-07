@@ -100,8 +100,11 @@ app.get('/api/urk/top', async (req, res) => {
    });
 
 app.get('/api/urk/name', async (req, res) => {
-       let url = req.url;
-       let qeury = url.split('=')[1];
+         if (req.query.name) {
+          let qeury = req.query.name;
+        } else {
+          res.status(400).send('{"error":"vul een naam in alsutublieft"}');
+        }
        request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" From [dbo].[Beeldbank Urk] WHERE Omschrijving LIKE %"+qeury+"%;", function(err, rowCount, data) {
          if (err) {
            console.log(err);
@@ -110,7 +113,7 @@ app.get('/api/urk/name', async (req, res) => {
            complete(data);
          }
        });
-       request.addParameter('qr', TYPES.VarChar, qeury);
+       //request.addParameter('qr', TYPES.VarChar, qeury);
        var data = [];
        il = 0;
        let first = true;
