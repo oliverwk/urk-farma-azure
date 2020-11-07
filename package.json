@@ -6,9 +6,6 @@
     "node": "12.x"
   },
   "main": "index.js",
-  "scripts": {
-    "test": "node test.js"
-  },
   "dependencies": {
     "express": "^4.15.2",
     "tedious": "^9.2.1"
