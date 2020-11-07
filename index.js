@@ -100,12 +100,16 @@ app.get('/api/urk/top', async (req, res) => {
    });
 
 app.get('/api/urk/name', async (req, res) => {
-         if (req.query.name) {
-          let qeury = req.query.name;
+        console.log("The qeury: "+req.query.name);
+        let qeury = "";
+        if (req.query.name) {
+          console.log("true");
+          qeury = req.query.name;
         } else {
+          qeury = "";
           res.status(400).send('{"error":"vul een naam in alsutublieft"}');
         }
-       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" From [dbo].[Beeldbank Urk] WHERE Omschrijving LIKE %"+qeury+"%;", function(err, rowCount, data) {
+       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" From [dbo].[Beeldbank Urk] WHERE Omschrijving LIKE '%{}%';".replace("{}", qeury), function(err, rowCount, data) {
          if (err) {
            console.log(err);
          } else {
