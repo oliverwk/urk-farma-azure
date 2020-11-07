@@ -1,13 +1,10 @@
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
+var TYPES = require('tedious').TYPES;
 const express = require('express')
-
+var fs = require('fs');
 
 const app = express()
-
-app.get('/', async (req, res) => {
-
-
      var config = {
        server: process.env.SQL_server,
        authentication: {
@@ -26,50 +23,91 @@ app.get('/', async (req, res) => {
      var connection = new Connection(config);
 
      connection.connect(function(err) {
-         // If no error, then good to go...
-         executeStatement();
-       }
-     );
-     connection.on('connect', function(err) {
-        if (err) {
-          if (String(err).includes("sp_set_firewall_rule")) {
-            const fetch = require('node-fetch');
-            let body = {
-                  	"properties.endIpAddress": String(err).split("by the login. Client with IP address ")[1].split(" is not allowed to access the server.  To enable access")[0],
-                  	"properties.startIpAddress": String(err).split("by the login. Client with IP address ")[1].split(" is not allowed to access the server.  To enable access")[0]
-                  }
-            fetch(' https://management.azure.com/subscriptions/df5a3c67-2434-41ed-9e99-c8305e8c717f/resourceGroups/Urk-Frama/providers/Microsoft.Sql/servers/Urk-farma/firewallRules/Heroku_new_ip?api-version=2014-04-01', {
-              method: 'PUT',
-              body:    JSON.stringify(body),
-              headers: { 'Content-Type': 'application/json' , 'Authorization' : "Bearer "+process.env.Azure_Bearen_token},
-            })
-            res.status(500).send("try again with the ip "+String(err).split("by the login. Client with IP address ")[1].split(" is not allowed to access the server.  To enable access")[0]);
-          } else {
-               console.error('---- Got a connection error ', err,' ------');
-                res.status(500).send('----- Got a connection error \n\n', err);
-          }
-        } else {
-           console.log('Connected');
-        }
-     })
+       if (err) {
+         mail_me('----- Got a connection error \n\n', err);
+     } else {
+        console.log('Connected');
+     }});
 
-     connection.on('debug', function(text) {
-         //console.log(text);
-       }
-     );
 
-     function executeStatement() {
-       request = new Request("select TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" From [dbo].[Beeldbank Urk];", function(err, rowCount, data) {
+app.get('/api/urk/top', async (req, res) => {
+       count = 0
+       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" From [dbo].[Beeldbank Urk];", function(err, rowCount, data) {
          if (err) {
            console.log(err);
          } else {
            console.log(rowCount + ' rows');
-           complete(data)
+           complete(data);
+         }
+       });
 
+       var data = [];
+       il = 0;
+       let first = true;
+       const id = '{"userType":0,"flags":16,"type":{"id":56,"type":"INT4","name":"Int"},"colName":"Id"}';
+       request.on('row', function(columns) {
+            for (var i = 0; i < columns.length; i++) {
+              if (first) {
+                data[il] = "";
+                console.log('[{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"');
+                data[il] = '[{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"';
+                first = false;
+              } else {
+               if (columns[i].value === null) {
+                 if (JSON.stringify(columns[i].metadata) == id) {
+                   data[il] = data[il].substring(0, data[il].length - 2)+ '}';
+                   il++;
+                   console.log('},{"'+columns[i].metadata.colName+'":"null"');
+                   data[il] = '},{"'+columns[i].metadata.colName+'":"null"';
+                 } else if (JSON.stringify(columns[i].metadata.colName) == '"Foto Nr"') {
+                     console.warn("Foto Nr\n\n");
+                     console.log(',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}');
+                     data[il] += ',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}';
+                 } else {
+                   console.log(',"'+columns[i].metadata.colName+'":"null"');
+                    data[il] += ',"'+columns[i].metadata.colName+'":"null"';
+                 }
+              } else {
+                if (JSON.stringify(columns[i].metadata) == id) {
+                  il++;
+                  data[il] = "";
+                  console.log('},{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"');
+                  data[il] = '{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"';
+                } else if (JSON.stringify(columns[i].metadata.colName) == '"Foto Nr"') {
+                    console.warn("Foto Nr\n\n");
+                    console.log(',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}');
+                    data[il] += ',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}';
+                } else {
+                  console.log(',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"');
+                  data[il] += ',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"';
+                }
+               }
+            }
+          }
+       });
+
+        function complete(rowCount, more) {
+           console.log("complete, alles van sql server is binnen en de .on(row) function is dus ook klaar en nu stuur ik dit: ");
+           console.log(String(data)+"]");
+           res.status(200).send(String(data)+"]");
          }
 
+       connection.execSql(request);
+   });
+
+app.get('/api/urk/name', async (req, res) => {
+       let url = req.url;
+       let qeury = url.split('=')[1];
+       request = new Request("SELECT Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" FROM [dbo].[Beeldbank Urk] WHERE Omschrijving LIKE %"+qeury+"% ;",function(err, rowCount, data) {
+         if (err) {//SELECT * FROM [dbo].[Beeldbank Urk] WHERE id LIKE 340;
+           console.log(err);
+         } else {
+           console.log(rowCount + ' rows');
+           complete(data)
+         }
          connection.close();
        });
+       request.addParameter('qr', TYPES.VarChar, qeury);
        var data = [];
        data.push("[")
 
@@ -80,28 +118,11 @@ app.get('/', async (req, res) => {
          var final_jsons = sdata.replace(nes,"").replace(',[{','{"').replace('},]',"}]").replace('[,{','[{"');
          console.log(final_jsons);
          var final_json = JSON.parse(final_jsons);
-         /*
-         console.log(final_json.length);
-         console.log("\n-- Begin newline--\n");
-         let lenst = final_json.length/10;
-         for (var i = 0; i < parseInt(lenst); i++) {
-            console.log("lents i "+i);
-            console.log(parseInt(lenst));
-            */
             var array_array = [];
             var array_json = [];
             function intin() {
               it++;
-              //array_array.push(array_json);
-              /*
-              if (it == final_json.length) {
-                console.log("last");
-                console.log(array_array);
-                console.log("["+String(array_array).replace("',","")+"]");
-              //  res.status(200).send("["+String(array_array).replace("',","")+"]");
-                return String(array_array).replace("',","");
-              }
-              */
+
 
               console.log(it);
             }
@@ -180,16 +201,9 @@ app.get('/', async (req, res) => {
          });
        });
         function complete(rowCount, more) {
-
-
            console.log("--- Sending Data ---\n");
            let nes = '\"'
-
-           //console.log(sdata.replace(nes,"").replace(',[{','{"').replace('},]',"}]").replace('[,{','[{"'))
-           var resing =  fn()//.then(array_arrays => res.status(200).send("["+array_arrays+"]")).catch(err => res.status(500).send("er ging iets mis in het script \n"+err)+console.error(err) );
-          // res.status(200).send(sdata.replace(nes,"").replace(',[{','{"').replace('},]',"}]").replace('[,{','[{"'))
-          //res.status(200).send(resing)
-
+           var resing =  fn()
            console.log("\n--- Send The Data ---")
          }
 
@@ -198,10 +212,8 @@ app.get('/', async (req, res) => {
 
        // In SQL Server 2000 you may need: connection.execSqlBatch(request);
        connection.execSql(request);
-   }
-
-
 
 })
-
-app.listen(process.env.PORT)
+app.listen(process.env.PORT, () => {
+  console.log(`Urk API listening at http://localhost:${process.env.PORT}`)
+})

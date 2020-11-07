@@ -12,11 +12,10 @@
   },
   "dependencies": {
     "express": "^4.15.2",
-    "node-fetch": "^2.6.0",
     "tedious": "^9.2.1"
   },
   "devDependencies": {
-    "got": "^11.3.0",
+    "got": "^11.8.0",
     "tape": "^4.7.0"
   },
   "keywords": [
