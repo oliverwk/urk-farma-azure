@@ -20,7 +20,10 @@ const app = express()
      };
 
      var connection = new Connection(config);
-
+     function mail_me(err) {
+       console.error('----- Got a connection error \n\n',err);
+       process.exit(1)
+     }
      connection.connect(function(err) {
        if (err) {
          mail_me('----- Got a connection error \n\n', err);
