@@ -61,8 +61,7 @@ app.get('/api/urk/top', async (req, res) => {
                    il++;
                    console.log('},{"'+columns[i].metadata.colName+'":"null"');
                    data[il] = '},{"'+columns[i].metadata.colName+'":"null"';
-                 } else if (JSON.stringify(columns[i].metadata.colName) == '"Foto Nr"') {
-                     console.warn("Foto Nr\n\n");
+                 } else if (JSON.stringify(columns[i].metadata.colName) == '"FotoNr"') {
                      console.log(',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}');
                      data[il] += ',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}';
                  } else {
@@ -75,8 +74,7 @@ app.get('/api/urk/top', async (req, res) => {
                   data[il] = "";
                   console.log('},{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"');
                   data[il] = '{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"';
-                } else if (JSON.stringify(columns[i].metadata.colName) == '"Foto Nr"') {
-                    console.warn("Foto Nr\n\n");
+                } else if (JSON.stringify(columns[i].metadata.colName) == '"FotoNr"') {
                     console.log(',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}');
                     data[il] += ',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}';
                 } else {
@@ -136,8 +134,8 @@ app.get('/api/urk/name', async (req, res) => {
                    il++;
                    console.log('},{"'+columns[i].metadata.colName+'":"null"');
                    data[il] = '},{"'+columns[i].metadata.colName+'":"null"';
-                 } else if (JSON.stringify(columns[i].metadata.colName) == '"Foto Nr"') {
-                     console.warn("Foto Nr\n\n");
+                 } else if (JSON.stringify(columns[i].metadata.colName) == '"FotoNr"') {
+                    
                      console.log(',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}');
                      data[il] += ',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}';
                  } else {
@@ -150,8 +148,7 @@ app.get('/api/urk/name', async (req, res) => {
                   data[il] = "";
                   console.log('},{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"');
                   data[il] = '{"'+columns[i].metadata.colName+'":"'+columns[i].value+'"';
-                } else if (JSON.stringify(columns[i].metadata.colName) == '"Foto Nr"') {
-                    console.warn("Foto Nr\n\n");
+                } else if (JSON.stringify(columns[i].metadata.colName) == '"FotoNr"') {
                     console.log(',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}');
                     data[il] += ',"'+columns[i].metadata.colName+'":"'+columns[i].value+'"}';
                 } else {
