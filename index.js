@@ -34,7 +34,7 @@ const app = express()
 
 app.get('/api/urk/top', async (req, res) => {
        count = 0
-       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" From [dbo].[Beeldbank Urk];", function(err, rowCount, data) {
+       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr From [dbo].[Beeldbank Urk];", function(err, rowCount, data) {
          if (err) {
            console.log(err);
          } else {
@@ -109,7 +109,7 @@ app.get('/api/urk/name', async (req, res) => {
           qeury = "";
           res.status(400).send('{"error":"vul een naam in alsutublieft"}');
         }
-       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,\"Foto Nr\" From [dbo].[Beeldbank Urk] WHERE Omschrijving LIKE '%{}%';".replace("{}", qeury), function(err, rowCount, data) {
+       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr From [dbo].[Beeldbank Urk] WHERE Omschrijving LIKE '%{}%';".replace("{}", qeury), function(err, rowCount, data) {
          if (err) {
            console.log(err);
          } else {
