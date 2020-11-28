@@ -65,8 +65,8 @@ app.post('/api/urk/update', async (req, res) => {
                console.log(item[key]+", is null.");
            } else {
                console.log(item[key]+", isn't null, so we shut add this row to the database");
-               console.log( "INSERT INTO [dbo].[Beeldbank Urk] (Omschrijving, Locatie, Plank, Categorie, GPK, Inhoud, Producent, Eigenaar, FotoNr) VALUES ("+om+", "+lo+", "+pl+", "+ca+", "+gp+",  "+inh+",  "+pr+", "+ei+", "+fo+");");
-               sql_qeury += "INSERT INTO [dbo].[Beeldbank Urk] (Omschrijving, Locatie, Plank, Categorie, GPK, Inhoud, Producent, Eigenaar, FotoNr) VALUES ("+om+", "+lo+", "+pl+", "+ca+", "+gp+",  "+inh+",  "+pr+", "+ei+", "+fo+");";
+               console.log( "INSERT INTO [dbo].[Objecten] (Omschrijving, Locatie, Plank, Categorie, GPK, Inhoud, Producent, Eigenaar, FotoNr) VALUES ("+om+", "+lo+", "+pl+", "+ca+", "+gp+",  "+inh+",  "+pr+", "+ei+", "+fo+");");
+               sql_qeury += "INSERT INTO [dbo].[Objecten] (Omschrijving, Locatie, Plank, Categorie, GPK, Inhoud, Producent, Eigenaar, FotoNr) VALUES ("+om+", "+lo+", "+pl+", "+ca+", "+gp+",  "+inh+",  "+pr+", "+ei+", "+fo+");";
                i = keys.length + 1;
                let addIt = true;
                console.log(addIt);
@@ -74,8 +74,8 @@ app.post('/api/urk/update', async (req, res) => {
          }
 
       } else {
-        console.log(" UPDATE [dbo].[Beeldbank Urk] SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =   "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;");
-        sql_qeury += " UPDATE [dbo].[Beeldbank Urk] SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =  "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;";
+        console.log(" UPDATE [dbo].[Objecten] SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =   "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;");
+        sql_qeury += " UPDATE [dbo].[Objecten] SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =  "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;";
       }
      });
    } else {
@@ -154,7 +154,7 @@ app.get('/api/urk/top', async (req, res) => {
        } else {
             console.log("[LOG] Didn't enter a limit we will just use 30.");
        }
-       request = new Request("SELECT TOP ("+limit+") Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,FotoNr FROM [dbo].[Beeldbank Urk];", function(err, rowCount, data) {
+       request = new Request("SELECT TOP ("+limit+") Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
            if (err) {
                console.log(err);
            } else {
@@ -163,7 +163,7 @@ app.get('/api/urk/top', async (req, res) => {
            }
       });
 
-       //request = new Request("set @limit = "+parseInt(req.query.limit)+" SELECT TOP (@limit) Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Beeldbank Urk];", function(err, rowCount, data) {
+       //request = new Request("set @limit = "+parseInt(req.query.limit)+" SELECT TOP (@limit) Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
        //request = new Request("SELECT TOP "+limit+" * FROM "+categorieDB+";", function(err, rowCount, data) {
 
        var data = [];
@@ -237,7 +237,7 @@ app.get('/api/urk/name', async (req, res) => {
            console.log("[LOG] Didn't enter a categorie.");
          }
          console.log(name);
-       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Beeldbank Urk] WHERE "+categorie+" LIKE '%"+name+"%';", function(err, rowCount, data) {
+       request = new Request("SELECT TOP 30 Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Objecten] WHERE "+categorie+" LIKE '%"+name+"%';", function(err, rowCount, data) {
          if (err) {
            console.log(err);
          } else {
