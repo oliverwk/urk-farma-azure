@@ -30,9 +30,10 @@ app.use(bodyParser.json());
      connection.connect(function(err) {
        if (err) {
          mail_me('----- Got a connection error \n\n', err);
-     } else {
-        console.log('Connected');
-     }});
+       } else {
+         console.log('Connected');
+     }
+   });
 
 
 app.post('/api/urk/update', async (req, res) => {
@@ -148,23 +149,38 @@ app.get('/api/urk/top', async (req, res) => {
        res.header('Content-Type','application/json');
        count = 0
        let limit = 30;
-        if (req.query.limit) {
+       let categorieDB = "";
+       if (req.query.categorie) {
+          if (String(req.query.categorie) === "objecten") {
+            categorieDB = "[dbo].[Objecten]";
+            console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Objecten].");
+          } else if (String(req.query.categorie) === "boeken") {
+            categorieDB = "[dbo].[Boeken]";
+            console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Boeken].");
+       }
+      } else {
+        categorieDB = "[dbo].[Objecten]";
+        console.log("[LOG] Didn't enter a categorie we will just use Objecten.");
+      }
+       if (req.query.limit) {
             console.log(req.query.limit);
             limit = parseInt(req.query.limit);
        } else {
             console.log("[LOG] Didn't enter a limit we will just use 30.");
+            limit = 50;
        }
-       request = new Request("SELECT TOP ("+limit+") Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar,FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
-           if (err) {
-               console.log(err);
-           } else {
-                console.log(rowCount + ' rows');
-                complete(data);
-           }
-      });
 
-       //request = new Request("set @limit = "+parseInt(req.query.limit)+" SELECT TOP (@limit) Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
-       //request = new Request("SELECT TOP "+limit+" * FROM "+categorieDB+";", function(err, rowCount, data) {
+//       request = new Request("set @limit = "+parseInt(req.query.limit)+" SELECT TOP (@limit) Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
+       let lqs = "SELECT TOP ("+limit+") * FROM "+categorieDB+";";
+       console.log(lqs);
+       request = new Request(lqs, function(err, rowCount, data) {
+         if (err) {
+           console.log(err);
+         } else {
+           console.log(rowCount + ' rows');
+           complete(data);
+         }
+       });
 
        var data = [];
        il = 0;
