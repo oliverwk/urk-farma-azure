@@ -199,6 +199,13 @@ app.get('/api/urk/top', async (req, res) => {
 						console.log("[LOG] Didn't enter a limit we will just use 50.");
 						limit = 50;
 			 }
+			 if (req.query.vanaf) {
+						console.log(req.query.vanaf);
+						limit = parseInt(req.query.vanaf);
+			 } else {
+						console.log("[LOG] Didn't enter a vanaf we will just use 0.");
+						limit = 0;
+			 }
 
 //       request = new Request("set @limit = "+parseInt(req.query.limit)+" SELECT TOP (@limit) Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
 			 // 						dit between is hier zo dat je pagina's kan toevoegen later
