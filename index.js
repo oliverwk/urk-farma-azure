@@ -177,6 +177,7 @@ app.get('/api/urk/top', async (req, res) => {
 			 res.header('Content-Type','application/json');
 			 count = 0
 			 let limit = 30;
+			 let vanaf = 0;
 			 let categorieDB = "";
 			 if (req.query.categorieDB) {
 					if (String(req.query.categorieDB) === "objecten") {
@@ -201,15 +202,15 @@ app.get('/api/urk/top', async (req, res) => {
 			 }
 			 if (req.query.vanaf) {
 						console.log(req.query.vanaf);
-						limit = parseInt(req.query.vanaf);
+						vanaf = parseInt(req.query.vanaf);
 			 } else {
 						console.log("[LOG] Didn't enter a vanaf we will just use 0.");
-						limit = 0;
+						vanaf = 0;
 			 }
 
 //       request = new Request("set @limit = "+parseInt(req.query.limit)+" SELECT TOP (@limit) Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
 			 // 						dit between is hier zo dat je pagina's kan toevoegen later
-			 let lqs = "SELECT * FROM "+categorieDB+" WHERE Id BETWEEN (0) AND  ("+limit+");";
+			 let lqs = "SELECT * FROM "+categorieDB+" WHERE Id BETWEEN ("+vanaf+") AND  ("+limit+");";
 			 console.log(lqs);
 			 request = new Request(lqs, function(err, rowCount, data) {
 				 if (err) {
