@@ -11,10 +11,10 @@ app.use(bodyParser.json());
 		 var config = {
 			 server: process.env.SQL_server,
 			 authentication: {
-					 type: 'default',
-					 options: {
-							 userName: 'peter',
-							 password: process.env.SQL_Password
+			 	type: 'default',
+					options: {
+						userName: process.env.SQL_User,
+						password: process.env.SQL_Password
 					 }
 			 },
 			 options: {
