@@ -55,8 +55,8 @@ app.post('/api/urk/update', async (req, res) => {
 							console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Boeken].");
 				 }
 				} else {
-					categorieDB = "[dbo].[Objecten]";
-					res.header('x-warning',' Didn\'t enter a categorie we will just use Objecten');
+					categorieDB = "[dbo].[Objecten]"
+					res.header('x-warning',' Didn\'t enter a categorie we will just use Objecten');							res.header('x-error',' Didn\'t enter a categorie');
 					console.log("[WARNING] Didn't enter a categorie we will just use Objecten.");
 				}
 	var sql_qeury = "";
@@ -330,7 +330,8 @@ app.get('/api/urk/name', async (req, res) => {
 				 }
 
 	//       request = new Request("set @limit = "+parseInt(req.query.limit)+" SELECT TOP (@limit) Id,Locatie,Plank,Categorie,Omschrijving,GPK,Inhoud,Producent,Eigenaar, FotoNr FROM [dbo].[Objecten];", function(err, rowCount, data) {
-				 let lqs = "SELECT TOP ("+limit+") * FROM "+categorieDB+" WHERE "+categorie+" LIKE '%"+name+"%';";
+				 let lqs = "SELECT TOP ("+limit+") * FROM "+categorieDB+" WHERE ["+categorie+"] LIKE '%"+name+"%';";
+				 console.log(lqs);
 				 request = new Request(lqs, function(err, rowCount, data) {
 				 if (err) {
 					 console.log(err);
@@ -385,7 +386,7 @@ app.get('/api/urk/name', async (req, res) => {
 
 			 function complete(rowCount, more) {
 					 console.log("complete, alles van sql server is binnen en de .on(row) function is dus ook klaar, data: \n");
-					 if (data === empty) {
+					 if (rowCount === 0) {
 						 console.log("[]");
 						 //Not found
 						 res.status(404).send("[]");
