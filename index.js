@@ -264,7 +264,7 @@ app.get('/api/urk/top', async (req, res) => {
 						}
 					}
 			 });
-				 function complete(data, rowCount) {
+				 function complete(Data, rowCount) {
 					 console.log("\x1b[32m"+request.parameters[0].value+"\x1b[0m");
 					 //Legt het heel goed uit
 					 console.log("complete, alles van sql server is binnen en de req.on(row) function is dus ook klaar en nu stuur ik dit: ");
@@ -393,7 +393,7 @@ app.get('/api/urk/name', async (req, res) => {
 					}
 			 });
 
-			 function complete(data, rowCount) {
+			 function complete(Data, rowCount) {
 					 console.log("complete, alles van sql server is binnen en de .on(row) function is dus ook klaar, data: \n");
 					 if (0 >= parseInt(rowCount)) {
 						 console.log("[]");
