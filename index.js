@@ -217,8 +217,8 @@ app.get('/api/urk/top', async (req, res) => {
 					 console.log(err);
 				 } else {
 					 res.header('rowCount', rowCount);
-					 console.log(rowCount + ' rows');
-					 complete(data);
+					 console.log(rowCount, 'rows');
+					 complete(data, rowCount);
 				 }
 			 });
 
@@ -264,19 +264,27 @@ app.get('/api/urk/top', async (req, res) => {
 						}
 					}
 			 });
-				 function complete(rowCount, more) {
+				 function complete(data, rowCount) {
 					 console.log("\x1b[32m"+request.parameters[0].value+"\x1b[0m");
 					 //Legt het heel goed uit
 					 console.log("complete, alles van sql server is binnen en de req.on(row) function is dus ook klaar en nu stuur ik dit: ");
-					 console.log(String(data)+"]");
-					 console.log("Send a response at: "+new Date().toString());
+
 					 // to veriy on client side res.header('x-SHA256-base64', crypto.subtle.digest('SHA-256', data));
 					 let parData =  JSON.stringify(String(data)+"]", null, 4);
 					 //const hash = crypto.createHash('sha256').update(parData);
 					 const hash = crypto.createHash('sha256').update(parData).digest('hex');
 					 res.header('SHA256-Base64', Buffer.from(hash).toString('base64'));
 					 //res.header('SHA256-Base64', Buffer.from(crypto.createHash('sha256').update(parData)).toString('base64')); //.update(Buffer.from(parData, 'utf-8')));
-					 res.status(200).send(String(data)+"]");
+					 if (0 >= parseInt(rowCount)) {
+						 console.log("[]");
+						 //Nothing found
+						 res.status(404).send("[]");
+						 console.log("Send a response at: "+new Date().toString());
+					 } else {
+						 console.log(String(data)+"]");
+						 res.status(200).send(String(data)+"]");
+						 console.log("Send a response at: "+new Date().toString());
+					 }
 				 }
 
 			 connection.execSql(request);
@@ -339,7 +347,7 @@ app.get('/api/urk/name', async (req, res) => {
 				 } else {
 					 res.header('rowCount', rowCount);
 					 console.log(rowCount + ' rows');
-					 complete(data);
+					 complete(data, rowCount);
 				 }
 			 });
 			 data = [];
@@ -385,15 +393,17 @@ app.get('/api/urk/name', async (req, res) => {
 					}
 			 });
 
-			 function complete(rowCount, more) {
+			 function complete(data, rowCount) {
 					 console.log("complete, alles van sql server is binnen en de .on(row) function is dus ook klaar, data: \n");
-					 if (rowCount === 0) {
+					 if (0 >= parseInt(rowCount)) {
 						 console.log("[]");
-						 //Not found
+						 //Nothing found
 						 res.status(404).send("[]");
+						 console.log("Send a response at: "+new Date().toString());
 					 } else {
 						 console.log(String(data)+"]");
 						 res.status(200).send(String(data)+"]");
+						 console.log("Send a response at: "+new Date().toString());
 					 }
 				 }
 
