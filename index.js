@@ -32,7 +32,7 @@ app.use(bodyParser.json());
 		 }
 		 connection.connect(function(err) {
 			 if (err) {
-				 mail_me('----- Got a connection error \n\n', err);
+				 console.error('----- Got a connection error \n\n', err);
 			 } else {
 				 console.log('Connected');
 		 }
@@ -55,9 +55,10 @@ app.post('/api/urk/update', async (req, res) => {
 							console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Boeken].");
 				 }
 				} else {
-					categorieDB = "[dbo].[Objecten]"
-					res.header('x-warning',' Didn\'t enter a categorie we will just use Objecten');							res.header('x-error',' Didn\'t enter a categorie');
-					console.log("[WARNING] Didn't enter a categorie we will just use Objecten.");
+					//categorieDB = "[dbo].[Objecten]";
+					res.header('x-error',' Didn\'t enter a categorie');
+		 		  res.sendStatus(400);
+					console.log("[WARNING] Didn't enter a categorie.");
 				}
 	var sql_qeury = "";
 	const prod_null = "Geen opgegeven.";
@@ -96,7 +97,6 @@ app.post('/api/urk/update', async (req, res) => {
 
 			} else {
 				// Dit is voor muteren
-				console.log("WTF: ", Object.keys(item)[1]);
 				console.log(" UPDATE "+categorieDB+" SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =   "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;");
 				sql_qeury += " UPDATE "+categorieDB+" SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =  "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;";
 			}
@@ -180,10 +180,10 @@ app.get('/api/urk/top', async (req, res) => {
 			 let vanaf = 0;
 			 let categorieDB = "";
 			 if (req.query.categorieDB) {
-					if (String(req.query.categorieDB) === "objecten") {
+					if (String(req.query.categorieDB).toUpperCase() === "objecten".toUpperCase()) {
 						categorieDB = "[dbo].[Objecten]";
 						console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Objecten].");
-					} else if (String(req.query.categorieDB) === "boeken") {
+					} else if (String(req.query.categorieDB).toUpperCase() === "boeken".toUpperCase()) {
 						categorieDB = "[dbo].[Boeken]";
 						console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Boeken].");
 			 }
@@ -264,17 +264,18 @@ app.get('/api/urk/top', async (req, res) => {
 						}
 					}
 			 });
-
 				 function complete(rowCount, more) {
 					 console.log("\x1b[32m"+request.parameters[0].value+"\x1b[0m");
 					 //Legt het heel goed uit
 					 console.log("complete, alles van sql server is binnen en de req.on(row) function is dus ook klaar en nu stuur ik dit: ");
 					 console.log(String(data)+"]");
 					 console.log("Send a response at: "+new Date().toString());
-					 // to veriy on client side res.header('x-SHA256-base64', crypto.subtle.digest('SHA-256', s));
-					 let parData =  JSON.stringify(JSON.parse(String(data)+"]"), null, 4);
-					 //console.log(parData);
-					 res.header('SHA256-Base64', crypto.createHash('sha256').update(Buffer.from(parData, 'utf-8')).digest('base64'));
+					 // to veriy on client side res.header('x-SHA256-base64', crypto.subtle.digest('SHA-256', data));
+					 let parData =  JSON.stringify(String(data)+"]", null, 4);
+					 //const hash = crypto.createHash('sha256').update(parData);
+					 const hash = crypto.createHash('sha256').update(parData).digest('hex');
+					 res.header('SHA256-Base64', Buffer.from(hash).toString('base64'));
+					 //res.header('SHA256-Base64', Buffer.from(crypto.createHash('sha256').update(parData)).toString('base64')); //.update(Buffer.from(parData, 'utf-8')));
 					 res.status(200).send(String(data)+"]");
 				 }
 
@@ -300,10 +301,10 @@ app.get('/api/urk/name', async (req, res) => {
 				 let categorieDB = "";
 				 //req.query.categorie bestaat
 				 if (req.query.categorieDB) {
-						if (String(req.query.categorieDB) === "objecten") {
+						if (String(req.query.categorieDB).toUpperCase() === "objecten".toUpperCase() ) {
 							categorieDB = "[dbo].[Objecten]";
 							console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Objecten].");
-						} else if (String(req.query.categorieDB) === "boeken") {
+						} else if (String(req.query.categorieDB).toUpperCase() === "boeken".toUpperCase()) {
 							categorieDB = "[dbo].[Boeken]";
 							console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Boeken].");
 					 }
