@@ -1,22 +1,24 @@
 {
   "name": "node-js-urk-frama-rest-api",
-  "version": "0.3.0",
-  "description": "A restful Node.js api for the urk-frama project",
+  "version": "3.0.1",
+  "description": "A restful Node.js api using for the urk-frama project",
   "engines": {
-    "node": "12.x"
+    "node": "15.x"
   },
   "main": "index.js",
-   "repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/oliverwk/urk-farma-azure"
   },
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "body-parser": "^1.19.0",
-    "express": "^4.15.2",
+    "express": "^4.17.1",
     "tedious": "^9.2.1"
   },
   "keywords": [
-    "node",
     "api",
     "urk"
   ],
