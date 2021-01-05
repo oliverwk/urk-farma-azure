@@ -174,6 +174,7 @@ app.get('/api/urk/top', async (req, res) => {
 			 res.header('Access-Control-Allow-Origin','*');
 			 res.header('X-Powered-By', "Me ;)")
  			 res.header('access-control-expose-headers', "*")
+			 res.header('Cache-Control', "no-store");
 			 res.header('Content-Type','application/json');
 			 count = 0
 			 let limit = 30;
@@ -292,8 +293,9 @@ app.get('/api/urk/top', async (req, res) => {
 
 app.get('/api/urk/name', async (req, res) => {
 				res.header('Access-Control-Allow-Origin','*');
-				res.header('X-Powered-By', "Me ;)")
-				res.header('access-control-expose-headers', "*")
+				res.header('X-Powered-By', "Me ;)");
+				res.header('access-control-expose-headers', "*");
+				res.header('Cache-Control', "no-store");
 				res.header('Content-Type','application/json');
 				console.log("The qeury: "+req.query.name);
 				let name = "";
