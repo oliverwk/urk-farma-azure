@@ -3,7 +3,7 @@ var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
 const express = require('express');
 const bodyParser = require('body-parser');
-const { subtle } = require('crypto').webcrypto;
+const crypto = require('crypto').webcrypto;
 var data = [];
 const app = express()
 app.use(bodyParser.text({ type: "*/*" }));
@@ -43,7 +43,7 @@ var config = {
 			 }
 			});
 
-// WARNING: Dit is nog niet af moet nog categorieDB toevoegen en keys updat met iets client side
+
 app.post('/api/urk/update', async (req, res) => {
 	console.log("Got a reqeust at: "+new Date().toString());
 	res.header('Access-Control-Allow-Origin','*');
@@ -272,7 +272,7 @@ app.get('/api/urk/top', async (req, res) => {
 			 });
 				 async function digest(data, algorithm = 'SHA-256') {
 					 const ec = new TextEncoder();
-					 const digest = await subtle.digest(algorithm, ec.encode(data));
+					 const digest = await crypto.subtle.digest(algorithm, ec.encode(data));
 					 return digest;
 				 }
 				 function complete(Data, rowCount) {
@@ -432,5 +432,5 @@ app.get('/api/urk/name', async (req, res) => {
 			 connection.execSql(request, req.query.name);
 });
 
-app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 3.0}") })
+app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 3.2}") })
 app.get('/api/urk/status', (req, res) => { res.status(200).send("{\"status\": 200, \"time\" : "+new Date().toString()+"}") })
