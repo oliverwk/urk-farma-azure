@@ -3,7 +3,7 @@ var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
 const express = require('express');
 const bodyParser = require('body-parser');
-const crypto = require('crypto').webcrypto;
+const crypto = require('crypto');
 var data = [];
 const app = express()
 app.use(bodyParser.text({ type: "*/*" }));
@@ -270,26 +270,14 @@ app.get('/api/urk/top', async (req, res) => {
 						}
 					}
 			 });
-				 async function digest(data, algorithm = 'SHA-256') {
-					 const ec = new TextEncoder();
-					 const digest = await crypto.subtle.digest(algorithm, ec.encode(data));
-					 return digest;
-				 }
 				 function complete(Data, rowCount) {
-					 console.log("\x1b[32m"+request.parameters[0].value+"\x1b[0m");
-					 //Legt het heel goed uit
-					 console.log("complete, alles van sql server is binnen en de req.on(row) function is dus ook klaar en nu stuur ik dit: ");
+					  console.log("\x1b[32m"+request.parameters[0].value+"\x1b[0m");
+					  //Legt het heel goed uit
+					  console.log("complete, alles van sql server is binnen en de req.on(row) function is dus ook klaar en nu stuur ik dit: ");
 
-					 // to veriy on client side res.header('x-SHA256-base64', crypto.subtle.digest('SHA-256', data));
-					 let parData =  JSON.stringify(String(data)+"]", null, 4);
-					 //const hash = crypto.createHash('sha256').update(parData).digest('hex');
-					 const thash = digest(parData).then((bufhash) => {
-						var hash = '';
-			 			var bytes = new Uint8Array(bufhash);
-			 			var len = bytes.byteLength;
-			 			for (var i = 0; i < len; i++) {
-			 			        hash += String.fromCharCode(bytes[i]);
-			 			}
+					  // to veriy on client side res.header('x-SHA256-base64', crypto.subtle.digest('SHA-256', data));
+					  let parData =  JSON.stringify(String(data)+"]", null, 4);
+					  const hash = crypto.createHash('sha256').update(parData).digest('hex');
 			 			const bhash = Buffer.from(hash).toString('base64');
 						console.log("bhash", hash);
 						res.header('SHA256-Base64', bhash);
@@ -303,9 +291,7 @@ app.get('/api/urk/top', async (req, res) => {
  						 res.status(200).send(String(data)+"]");
  						 console.log("Send a response at: "+new Date().toString());
  					 }
-					 });
-					//res.header('SHA256-Base64', Buffer.from(crypto.createHash('sha256').update(parData)).toString('base64')); //.update(Buffer.from(parData, 'utf-8')));
-
+					 //res.header('SHA256-Base64', Buffer.from(crypto.createHash('sha256').update(parData)).toString('base64')); //.update(Buffer.from(parData, 'utf-8')));
 				 }
 
 			 connection.execSql(request);
