@@ -5,9 +5,9 @@
   "engines": {
     "node": "15.x"
   },
-  "repository": {		
-    "type": "git",		
-    "url": "https://github.com/oliverwk/urk-farma-azure"		
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oliverwk/urk-farma-azure"
   },
   "main": "index.js",
   "scripts": {
