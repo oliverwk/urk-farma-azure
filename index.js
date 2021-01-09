@@ -1,14 +1,15 @@
 var Connection = require('tedious').Connection;
 var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
-const bodyParser = require('body-parser');
 const express = require('express');
-const crypto = require('crypto');
-const encoder = new TextEncoder();
+const bodyParser = require('body-parser');
+const { subtle } = require('crypto').webcrypto;
 var data = [];
 const app = express()
-app.use(bodyParser.json());
-		 var config = {
+app.use(bodyParser.text({ type: "*/*" }));
+var cors = require('cors')
+app.use(cors())
+var config = {
 			 server: process.env.SQL_server,
 			 authentication: {
 			 	type: 'default',
@@ -35,8 +36,12 @@ app.use(bodyParser.json());
 				 console.error('----- Got a connection error \n\n', err);
 			 } else {
 				 console.log('Connected');
-		 }
-	 });
+				 //process.env.PORT is voor azure nodig
+				 app.listen(process.env.PORT, () => {
+				 	console.log(`Urk API listening at http://localhost:${process.env.PORT}`)
+				 })
+			 }
+			});
 
 // WARNING: Dit is nog niet af moet nog categorieDB toevoegen en keys updat met iets client side
 app.post('/api/urk/update', async (req, res) => {
@@ -61,44 +66,44 @@ app.post('/api/urk/update', async (req, res) => {
 					console.log("[WARNING] Didn't enter a categorie.");
 				}
 	var sql_qeury = "";
-	const prod_null = "Geen opgegeven.";
-	const inhoud_null ="Niets opgegeven.";
-	const GPK_null = "Niets";
+	let ikeys = "";
+	const prod_null = "-";
 	console.log("Got body: ", req.body);
 		if (!!req.body) {
-			 req.body.forEach((item, i) => {
+			 JSON.parse(req.body).forEach((item, i) => {
 			 console.log(item);
-			 let inh = item.inhoud != inhoud_null ? "'"+item.inhoud+"'" : null;
-			 let gp = item.GPK != GPK_null ? "'"+item.GPK+"'" : null;
-			 let pr = item.producent != prod_null ? "'"+item.producent+"'" : null;
-			 let fo = item.FotoNR != GPK_null ? item.FotoNR : null;
-			 let om = item.Omschrijving != null ? "'"+item.Omschrijving+"'" : null;
-			 let lo = item.Locatie != null ? "'"+item.Locatie+"'" : null;
-			 let pl = item.plank != null ? "'"+item.plank+"'" : null;
-			 let ca = item.categorie != null ? "'"+item.categorie+"'" : null;
-			 let ei = item.Eigenaar != null ? "'"+item.Eigenaar+"'" : null;
 			 if (item.Id === 0) {
-				 console.log("Zero, doing nothing, besides checking and then adding to the database.");
-				 const keys = ["Omschrijving", "Locatie", "plank", "categorie", "GPK", "inhoud", "producent", "eigenaar", "FotoNR"]
-				 for (var i = 0; i < keys.length; i++) {
-					 let key = keys[i];
-					 if (item[key] === null) {
-							 console.log(item[key]+", is null.");
-					 } else {
-							 console.log(item[key]+", isn't null, so we shut add this row to the database");
-							// Dit is voor nieuwe records
-							 console.log( "INSERT INTO "+categorieDB+" (Omschrijving, Locatie, Plank, Categorie, GPK, Inhoud, Producent, Eigenaar, FotoNr) VALUES ("+om+", "+lo+", "+pl+", "+ca+", "+gp+",  "+inh+",  "+pr+", "+ei+", "+fo+");");
-							 sql_qeury += "INSERT INTO "+categorieDB+" (Omschrijving, Locatie, Plank, Categorie, GPK, Inhoud, Producent, Eigenaar, FotoNr) VALUES ("+om+", "+lo+", "+pl+", "+ca+", "+gp+",  "+inh+",  "+pr+", "+ei+", "+fo+");";
-							 i = keys.length + 1;
-							 let addIt = true;
-							 console.log(addIt);
-					 }
-				 }
+				 			console.log("Zero, checking it and then adding to the database.");
+				 			let keys =  Object.keys(item);
+							ikeys = "";
+							 //Dit is voor de key van de json
+							for (var titem of Object.keys(item)) {
+								console.log("key", titem);
+								titem == "Id" ? console.log("Is id") : ikeys += titem+", ";
+							}
+							ikeys = ikeys.trim().replace(/.$/,"");
 
+							 vals = "";
+				 			 for (var tkey of Object.keys(item)) {
+								 condition ? true : false
+				 					var nns = item[tkey] == null || item[tkey] === prod_null ? null : "'"+item[titem]+"'";
+								 tkey == "Id" ? console.log("Is id") : vals += nns+", ";
+				 			 }
+							 vals = vals.trim().replace(/.$/,"");
+							 console.log( "INSERT INTO "+categorieDB+" ("+ikeys+") VALUES ("+vals+");");
+							 sql_qeury += "INSERT INTO "+categorieDB+" ("+ikeys+") VALUES ("+vals+");";
 			} else {
-				// Dit is voor muteren
-				console.log(" UPDATE "+categorieDB+" SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =   "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;");
-				sql_qeury += " UPDATE "+categorieDB+" SET "+Object.keys(item)[1]+" =  "+om+" , "+Object.keys(item)[2]+" =  "+lo+" , "+Object.keys(item)[3]+" =  "+pl+" , "+Object.keys(item)[4]+" =  "+ca+" , "+Object.keys(item)[5]+" =  "+gp+" , "+Object.keys(item)[6]+" =  "+inh+" , "+Object.keys(item)[7]+" =  "+pr+" , "+Object.keys(item)[8]+" =  "+ei+" , FotoNr =  "+fo+" WHERE Id = '"+item.Id+"' ;";
+				// Dit is voor Muteren
+				vaels = "";
+				// FIXME: doe dit maar dan met
+				for (var titem of Object.keys(item)) {
+					var nn = item[titem] == null || item[titem] === prod_null ? null : "'"+item[titem]+"'";
+					titem == "Id" ? console.log("Is id:", item[titem]) : vaels += titem+" = "+nn+" , ";
+				}
+				 vaels = vaels.trim().replace(/.$/,"");
+
+				console.log("UPDATE "+categorieDB+" SET "+vaels+" WHERE Id = '"+item.Id+"' ;");
+				sql_qeury +="UPDATE "+categorieDB+" SET "+vaels+" WHERE Id = '"+item.Id+"' ;";
 			}
 		 });
 	 } else {
@@ -265,6 +270,11 @@ app.get('/api/urk/top', async (req, res) => {
 						}
 					}
 			 });
+				 async function digest(data, algorithm = 'SHA-256') {
+					 const ec = new TextEncoder();
+					 const digest = await subtle.digest(algorithm, ec.encode(data));
+					 return digest;
+				 }
 				 function complete(Data, rowCount) {
 					 console.log("\x1b[32m"+request.parameters[0].value+"\x1b[0m");
 					 //Legt het heel goed uit
@@ -272,20 +282,30 @@ app.get('/api/urk/top', async (req, res) => {
 
 					 // to veriy on client side res.header('x-SHA256-base64', crypto.subtle.digest('SHA-256', data));
 					 let parData =  JSON.stringify(String(data)+"]", null, 4);
-					 //const hash = crypto.createHash('sha256').update(parData);
-					 const hash = crypto.createHash('sha256').update(parData).digest('hex');
-					 res.header('SHA256-Base64', Buffer.from(hash).toString('base64'));
-					 //res.header('SHA256-Base64', Buffer.from(crypto.createHash('sha256').update(parData)).toString('base64')); //.update(Buffer.from(parData, 'utf-8')));
-					 if (0 >= parseInt(rowCount)) {
-						 console.log("[]");
-						 //Nothing found
-						 res.status(404).send("[]");
-						 console.log("Send a response at: "+new Date().toString());
-					 } else {
-						 console.log(String(data)+"]");
-						 res.status(200).send(String(data)+"]");
-						 console.log("Send a response at: "+new Date().toString());
-					 }
+					 //const hash = crypto.createHash('sha256').update(parData).digest('hex');
+					 const thash = digest(parData).then((bufhash) => {
+						var hash = '';
+			 			var bytes = new Uint8Array(bufhash);
+			 			var len = bytes.byteLength;
+			 			for (var i = 0; i < len; i++) {
+			 			        hash += String.fromCharCode(bytes[i]);
+			 			}
+			 			const bhash = Buffer.from(hash).toString('base64');
+						console.log("bhash", hash);
+						res.header('SHA256-Base64', bhash);
+						if (0 >= parseInt(rowCount)) {
+ 						 console.log("[]");
+ 						 //Nothing found
+ 						 res.status(404).send("[]");
+ 						 console.log("Send a response at: "+new Date().toString());
+ 					 } else {
+ 						 console.log(String(data)+"]");
+ 						 res.status(200).send(String(data)+"]");
+ 						 console.log("Send a response at: "+new Date().toString());
+ 					 }
+					 });
+					//res.header('SHA256-Base64', Buffer.from(crypto.createHash('sha256').update(parData)).toString('base64')); //.update(Buffer.from(parData, 'utf-8')));
+
 				 }
 
 			 connection.execSql(request);
@@ -414,7 +434,3 @@ app.get('/api/urk/name', async (req, res) => {
 
 app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 3.0}") })
 app.get('/api/urk/status', (req, res) => { res.status(200).send("{\"status\": 200, \"time\" : "+new Date().toString()+"}") })
-//process.env.PORT is voor azure nodig
-app.listen(process.env.PORT, () => {
-	console.log(`Urk API listening at http://localhost:${process.env.PORT}`)
-})
