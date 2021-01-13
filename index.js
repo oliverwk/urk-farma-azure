@@ -85,7 +85,7 @@ app.post('/api/urk/update', async (req, res) => {
 
 							 vals = "";
 				 			 for (var tkey of Object.keys(item)) {
-				 				var nns = item[tkey] == null || item[tkey] == prod_null ? null : "'"+item[titem]+"'";
+				 				var nns = item[tkey] == null || item[tkey] == prod_null ? null : "'"+item[tkey]+"'";
          					         	if (tkey == "Id") {
         					             		console.log("Is id")
      						             	} else {
