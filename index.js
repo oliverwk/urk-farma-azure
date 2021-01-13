@@ -85,8 +85,12 @@ app.post('/api/urk/update', async (req, res) => {
 
 							 vals = "";
 				 			 for (var tkey of Object.keys(item)) {
-				 					var nns = item[tkey] == null || item[tkey] === prod_null ? null : "'"+item[titem]+"'";
-								 tkey == "Id" ? console.log("Is id") : vals += nns+", ";
+				 				var nns = item[tkey] == null || item[tkey] == prod_null ? null : "'"+item[titem]+"'";
+         					         	if (tkey == "Id") {
+        					             		console.log("Is id")
+     						             	} else {
+          						        	vals += nns+", ";
+               							}
 				 			 }
 							 vals = vals.trim().replace(/.$/,"");
 							 console.log( "INSERT INTO "+categorieDB+" ("+ikeys+") VALUES ("+vals+");");
