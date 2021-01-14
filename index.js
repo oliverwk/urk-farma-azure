@@ -79,7 +79,11 @@ app.post('/api/urk/update', async (req, res) => {
 							 //Dit is voor de key van de json
 							for (var titem of Object.keys(item)) {
 								console.log("key", titem);
-								titem == "Id" ? console.log("Is id") : ikeys += titem+", ";
+								if (titem == "Id") {
+                  							 console.log("Is id")
+              							  } else {
+									titem.includes(" ") ? ikeys += "'"+titem+"', "   : ikeys += titem+", "
+           							  }
 							}
 							ikeys = ikeys.trim().replace(/.$/,"");
 
@@ -101,7 +105,7 @@ app.post('/api/urk/update', async (req, res) => {
 				// FIXME: doe dit maar dan met
 				for (var titem of Object.keys(item)) {
 					var nn = item[titem] == null || item[titem] === prod_null ? null : "'"+item[titem]+"'";
-					titem == "Id" ? console.log("Is id:", item[titem]) : vaels += titem+" = "+nn+" , ";
+					titem == "Id" ? console.log("Is id:", item[titem]) : vaels += "'"+titem+"' = "+nn+" , ";
 				}
 				 vaels = vaels.trim().replace(/.$/,"");
 
