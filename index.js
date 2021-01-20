@@ -3,7 +3,7 @@ var Request = require('tedious').Request;
 var TYPES = require('tedious').TYPES;
 const express = require('express');
 const bodyParser = require('body-parser');
-const crypto = require('crypto');
+const crypto = require('crypto').webcrypto;
 var data = [];
 const app = express()
 app.use(bodyParser.text({ type: "*/*" }));
