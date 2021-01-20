@@ -277,28 +277,34 @@ app.get('/api/urk/top', async (req, res) => {
 						}
 					}
 			 });
-				 function complete(Data, rowCount) {
+				 async function digest(data, algorithm = 'SHA-512') {
+			 		  const ec = new TextEncoder();
+			 		  const digest = await crypto.subtle.digest(algorithm, ec.encode(data));
+			 		  return digest;
+			 	}
+				async function complete(Data, rowCount) {
 					  console.log("\x1b[32m"+request.parameters[0].value+"\x1b[0m");
-					  //Legt het heel goed uit
-					  console.log("complete, alles van sql server is binnen en de req.on(row) function is dus ook klaar en nu stuur ik dit: ");
+					 	 //Legt het heel goed uit
+					 	 console.log("complete, alles van sql server is binnen en de req.on(row) function is dus ook klaar en nu stuur ik dit: ");
 
-					  // to veriy on client side res.header('x-SHA256-base64', crypto.subtle.digest('SHA-256', data));
-					  let parData =  JSON.stringify(String(data)+"]", null, 4);
-					  const hash = crypto.createHash('sha256').update(parData).digest('hex');
-			 			const bhash = Buffer.from(hash).toString('base64');
-						console.log("bhash", hash);
-						res.header('SHA256-Base64', bhash);
+					  	// to veriy on client side res.header('SHA512-Base64', crypto.subtle.digest('SHA-512', data));
+						let tmp = JSON.parse(String(data)+"]")
+					  	let parData =  JSON.stringify(tmp, null, 4);
+						let ll = await digest(parData);
+						console.log("parData",parData);
+			 			const bhash = Buffer.from(ll).toString('base64');
+						console.log("Hash", ll);
+						console.log("Base64", bhash);
+						res.header('SHA512-Base64', bhash);
 						if (0 >= parseInt(rowCount)) {
  						 console.log("[]");
  						 //Nothing found
  						 res.status(404).send("[]");
  						 console.log("Send a response at: "+new Date().toString());
  					 } else {
- 						 console.log(String(data)+"]");
  						 res.status(200).send(String(data)+"]");
  						 console.log("Send a response at: "+new Date().toString());
  					 }
-					 //res.header('SHA256-Base64', Buffer.from(crypto.createHash('sha256').update(parData)).toString('base64')); //.update(Buffer.from(parData, 'utf-8')));
 				 }
 
 			 connection.execSql(request);
