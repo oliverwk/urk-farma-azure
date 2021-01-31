@@ -1,9 +1,9 @@
 {
   "name": "node-js-urk-frama-rest-api",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "A restful Node.js api using for the urk-frama project",
   "engines": {
-    "node": "15.x"
+    "node": "14.x"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "helmet": "^4.3.1",
     "tedious": "^9.2.1"
   },
   "keywords": [
