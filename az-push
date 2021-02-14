@@ -1,15 +1,13 @@
-#!/usr/bin/env
-raw_version=$(az acr repository show-tags --name urkfarma --repository urk-farma --output tsv)
+export raw_version=$(az acr repository show-tags --name urkfarma --repository urk-farma --output tsv)
 export az_v_docker="${raw_version##*$'\n'}"
 arrIN=(${az_v_docker//./ })
 export az_v_docker="2.$((${arrIN[1]}+1))"
 echo "Pushing version ${az_v_docker}"
 echo "Building"
-sudo docker build -t olliedev/urk-farma:${az_v_docker} /Users/MWK/Desktop/urk-farma-azure/
-docker tag olliedev/urk-farma:${az_v_docker}  urkfarma.azurecr.io/urk-farma:${az_v_docker}
+sudo docker build -t olliedev/urk-farma:${az_v_docker}  . --file Dockerfile
+docker tag olliedev/urk-farma:${az_v_docker} ${DockerHubUrl}/urk-farma:${az_v_docker}
 echo "Pushing to the hub"
-docker push urkfarma.azurecr.io/urk-farma:${az_v_docker}
+docker push ${DockerHubUrl}/urk-farma:${az_v_docker}
 echo "Pushing to azure machine"
-az container create --resource-group urk-frama --name urk-farma --image urkfarma.azurecr.io/urk-farma:${az_v_docker} --cpu 1 --memory 1 --registry-login-server urkfarma.azurecr.io --registry-username urkfarma --registry-password sHT0AOK8sSrX3MSsXN7Q0=j5cnthJQq3 --dns-name-label urk-farma --ports 443 --out table
-echo
-echo "Pushed version ${az_v_docker}"
+az container create --resource-group urk-frama --name urk-farma --image ${DockerHubUrl}/urk-farma:${az_v_docker} --cpu 1 --memory 1 --registry-login-server ${DockerHubUrl} --registry-username $DockerHubUsername --registry-password $DockerHubPassword --dns-name-label urk-farma --ports 443 --out table
+echo "\nPushed version ${az_v_docker}"
