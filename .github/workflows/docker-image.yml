@@ -34,7 +34,7 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-              docker build . -t olliedev/urk-farma:${az_v_docker} --file Dockerfile
+              docker build -t olliedev/urk-farma:${az_v_docker} --file Dockerfile .
               docker push urkfarma.azurecr.io/urk-farma:${az_v_docker}
 
       - name: 'Deploy to Azure Container Instances'
