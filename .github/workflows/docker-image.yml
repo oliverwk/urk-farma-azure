@@ -33,7 +33,7 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Docker build and push
-      - run: |
+        run: |
           echo ${{ env.az_v_docker }}
           docker build -t olliedev/urk-farma:${{ env.az_v_docker }} .
           docker tag olliedev/urk-farma:${{ env.az_v_docker }} urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
