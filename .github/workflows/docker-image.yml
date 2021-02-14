@@ -10,40 +10,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Github checkout
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
       - name: Azure Login
-      - uses: azure/login@v1.1
+        uses: azure/login@v1.1
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Get vesion number
-      - uses: azure/CLI@v1
+        uses: azure/CLI@v1
         with:
-          azcliversion: 2.0.72
+          azcliversion: 2.17.1
           inlineScript: |
               export raw_version=$(az acr repository show-tags --name urkfarma --repository urk-farma --output tsv)
               export az_v_docker="${raw_version##*$'\n'}"
               arrIN=(${az_v_docker//./ })
               export az_v_docker="2.$((${arrIN[1]}+1))"
               echo "Pushing version ${az_v_docker}"
-      
+              echo "az_v_docker=${az_v_docker}" >> $GITHUB_ENV
+      - name: Get certifcate from secret store
+        run: |
+           python3 GetCert.py ${{ secrets.cert }} ${{ secrets.privkey }} ${{ secrets.ca }}
       - name: Docker Login 
-      - uses: azure/docker-login@v1
+        uses: azure/docker-login@v1
         with:
             login-server: ${{ secrets.REGISTRY_URL }}
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
-      - run: |
-              docker build . -t olliedev/urk-farma:${az_v_docker} --file Dockerfile
-              docker push urkfarma.azurecr.io/urk-farma:${az_v_docker}
-
-      - name: 'Deploy to Azure Container Instances'
-      - uses: 'azure/aci-deploy@v1'
+      - name: Docker build and push
+        run: |
+          echo ${{ env.az_v_docker }}
+          python3 createDockerfile.py ${{ secrets.SQL_server }} ${{ secrets.SQL_Password }} ${{ secrets.SQL_User }}
+          docker build -t olliedev/urk-farma:${{ env.az_v_docker }} .
+          docker tag olliedev/urk-farma:${{ env.az_v_docker }} urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
+          docker push urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
+      - name: Update container and reboot
+        uses: azure/CLI@v1
         with:
-            resource-group: urk-frama
-            dns-name-label: urk-farma
-            image: urkfarma.azurecr.io/urk-frama:${az_v_docker}
-            registry-username: ${{ secrets.REGISTRY_USERNAME }}
-            registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: urk-farma
-            location: 'germanywestcentral'
+          azcliversion: 2.17.1
+          inlineScript: |
+            az container create --resource-group urk-frama --name urk-farma --image urkfarma.azurecr.io/urk-farma:${az_v_docker} --cpu 1 --memory 1 --registry-login-server ${{ secrets.REGISTRY_URL }} --registry-username ${{ secrets.REGISTRY_USERNAME }} --registry-password ${{ secrets.REGISTRY_PASSWORD }} --dns-name-label urk-farma --ports 443 --out table
