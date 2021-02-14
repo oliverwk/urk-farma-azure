@@ -28,6 +28,7 @@ jobs:
               echo "az_v_docker=${az_v_docker}" >> $GITHUB_ENV
       - name: Get certifcate from secret store
         run: |
+           mkdir -p tls
            python3 GetCert.py ${{ secrets.cert }} ${{ secrets.privkey }} ${{ secrets.ca }}
       - name: Docker Login 
         uses: azure/docker-login@v1
