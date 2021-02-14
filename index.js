@@ -283,5 +283,5 @@ const ca = fs.readFileSync('./tls/ca.pem', 'utf8');
  };
 
 let server = https.createServer(options, app).listen(process.env.PORT, () => {
-  console.log(`Urk API listening at https://urk.wittopkoning.nl:${process.env.PORT}`);
+  console.log(`Urk Farma API listening at https://urk.wittopkoning.nl:${process.env.PORT}`);
 });
