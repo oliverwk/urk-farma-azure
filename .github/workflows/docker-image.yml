@@ -43,12 +43,14 @@ jobs:
       - name: 'Deploy to Azure Container Instances'
         uses: 'azure/aci-deploy@v1'
         with:
+            name: urk-farma
             resource-group: urk-frama
             dns-name-label: urk-farma
             ports: 443
+            cpu: 1
+            memory: 1.0
             image: urkfarma.azurecr.io/urk-frama:${{ env.az_v_docker }}
             registry-login-server: ${{ secrets.REGISTRY_URL }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            name: urk-farma
             location: 'germanywestcentral'
