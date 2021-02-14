@@ -26,6 +26,7 @@ jobs:
               arrIN=(${az_v_docker//./ })
               export az_v_docker="2.$((${arrIN[1]}+1))"
               echo "Pushing version ${az_v_docker}"
+              echo "az_v_docker=${az_v_docker}" >> $GITHUB_ENV
       
       - name: Docker Login 
         uses: azure/docker-login@v1
@@ -34,16 +35,19 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
       - run: |
-              docker build -t olliedev/urk-farma:${az_v_docker} /Users/MWK/Desktop/urk-farma-azure/
-              docker tag olliedev/urk-farma:${az_v_docker}  urkfarma.azurecr.io/urk-farma:${az_v_docker}
-              docker push urkfarma.azurecr.io/urk-farma:${az_v_docker}
+              echo ${{ env.az_v_docker }}
+      - name: Docker build and push
+      - run: |
+              docker build -t olliedev/urk-farma:${{ env.az_v_docker }} /Users/MWK/Desktop/urk-farma-azure/
+              docker tag olliedev/urk-farma:${{ env.az_v_docker }}  urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
+              docker push urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
 
       - name: 'Deploy to Azure Container Instances'
         uses: 'azure/aci-deploy@v1'
         with:
             resource-group: urk-frama
             dns-name-label: urk-farma
-            image: urkfarma.azurecr.io/urk-frama:${az_v_docker}
+            image: urkfarma.azurecr.io/urk-frama:${{ env.az_v_docker }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
             name: urk-farma
