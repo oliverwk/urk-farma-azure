@@ -18,7 +18,7 @@ jobs:
       - name: Get vesion number
         uses: azure/CLI@v1
         with:
-          azcliversion: 2.0.72
+          azcliversion: 2.17.1
           inlineScript: |
               export raw_version=$(az acr repository show-tags --name urkfarma --repository urk-farma --output tsv)
               export az_v_docker="${raw_version##*$'\n'}"
@@ -35,8 +35,8 @@ jobs:
       - name: Docker build and push
       - run: |
               echo ${{ env.az_v_docker }}
-              docker build -t olliedev/urk-farma:${{ env.az_v_docker }} /Users/MWK/Desktop/urk-farma-azure/
-              docker tag olliedev/urk-farma:${{ env.az_v_docker }}  urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
+              docker build -t olliedev/urk-farma:${{ env.az_v_docker }} .
+              docker tag olliedev/urk-farma:${{ env.az_v_docker }} urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
               docker push urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
 
       - name: 'Deploy to Azure Container Instances'
