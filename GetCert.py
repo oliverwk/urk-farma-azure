@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import sys
 i = 0
-print(len(sys.argv))
+print("Hoeveelheid argumenten:", len(sys.argv))
 if len(sys.argv) > 3:
     for file in ["cert.pem", "privkey.pem", "ca.pem"]:
-         file = open(file, "w")
+         file = open("./tls/"+file, "w")
          file.writelines(sys.argv[i].replace("%20"," "))
          file.close()
          i += 1
