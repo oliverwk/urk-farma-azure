@@ -34,10 +34,10 @@ jobs:
             password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Docker build and push
       - run: |
-              echo ${{ env.az_v_docker }}
-              docker build -t olliedev/urk-farma:${{ env.az_v_docker }} .
-              docker tag olliedev/urk-farma:${{ env.az_v_docker }} urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
-              docker push urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
+          echo ${{ env.az_v_docker }}
+          docker build -t olliedev/urk-farma:${{ env.az_v_docker }} .
+          docker tag olliedev/urk-farma:${{ env.az_v_docker }} urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
+          docker push urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
 
       - name: 'Deploy to Azure Container Instances'
         uses: 'azure/aci-deploy@v1'
