@@ -15,7 +15,6 @@ jobs:
         uses: azure/login@v1.1
         with:
             creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Get vesion number
         uses: azure/CLI@v1
         with:
@@ -27,7 +26,6 @@ jobs:
               export az_v_docker="2.$((${arrIN[1]}+1))"
               echo "Pushing version ${az_v_docker}"
               echo "az_v_docker=${az_v_docker}" >> $GITHUB_ENV
-      
       - name: Docker Login 
         uses: azure/docker-login@v1
         with:
