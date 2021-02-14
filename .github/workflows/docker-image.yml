@@ -36,7 +36,6 @@ jobs:
         run: |
           echo ${{ env.az_v_docker }}
           python3 createDockerfile.py ${{ secrets.SQL_server }} ${{ secrets.SQL_Password }} ${{ secrets.SQL_User }}
-          cat Dockerfile
           docker build -t olliedev/urk-farma:${{ env.az_v_docker }} .
           docker tag olliedev/urk-farma:${{ env.az_v_docker }} urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
           docker push urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
@@ -46,7 +45,9 @@ jobs:
         with:
             resource-group: urk-frama
             dns-name-label: urk-farma
+            ports: 443
             image: urkfarma.azurecr.io/urk-frama:${{ env.az_v_docker }}
+            registry-login-server: ${{ secrets.REGISTRY_URL }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
             name: urk-farma
