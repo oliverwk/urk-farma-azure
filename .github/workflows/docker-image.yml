@@ -43,7 +43,7 @@ jobs:
       - name: 'Deploy to Azure Container Instances'
         uses: 'azure/aci-deploy@v1'
         with:
-            name: urk-farma
+            name: urkfarma
             resource-group: urk-frama
             dns-name-label: urk-farma
             ports: 443
