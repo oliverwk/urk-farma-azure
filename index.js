@@ -1,5 +1,5 @@
 let express  = require('express');
-let http     = require('http');
+let https    = require('https');
 let helmet   = require('helmet');
 let cors 		 = require('cors');
 let fs 			 = require('fs');
@@ -271,17 +271,17 @@ app.post('/api/urk/update', async (req, res) => {
 	res.sendStatus(200);
 });
 
-app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 4.2}") })
+app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 4.3}") })
 app.get('/api/urk/status', (req, res) => { res.status(200).send("{\"status\": 200, \"time\" : "+new Date().toString()+"}") })
-/*const privateKey = fs.readFileSync('./tls/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('./tls/1chain.pem', 'utf8');
-const ca = fs.readFileSync('./tls/2chain.pem', 'utf8');
+const privateKey = fs.readFileSync('./tls/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('./tls/cert.pem', 'utf8');
+const ca = fs.readFileSync('./tls/ca.pem', 'utf8');
  const options = {
 	 key: privateKey,
 	 cert: certificate,
 	 ca: ca
  };
-*/
-let server = http.createServer(app).listen(process.env.PORT, () => {
-  console.log(`Urk API listening at http://urk.wittopkoning.nl:${process.env.PORT}`);
+
+let server = https.createServer(options, app).listen(process.env.PORT, () => {
+  console.log(`Urk API listening at https://urk.wittopkoning.nl:${process.env.PORT}`);
 });
