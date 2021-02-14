@@ -1,6 +1,6 @@
 import sys
 i = 0
-print(sys.argv)
+print(len(sys.argv))
 if len(sys.argv) > 3:
     for file in ["cert.pem", "privkey.pem", "ca.pem"]:
          file = open(file, "w")
