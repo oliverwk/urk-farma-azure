@@ -35,6 +35,8 @@ jobs:
       - name: Docker build and push
         run: |
           echo ${{ env.az_v_docker }}
+          printf 'FROM node:15\n\nWORKDIR ./\n\nCOPY package.json ./\n\nRUN npm install\n\nCOPY . .\n\nENV PORT=443\nENV SQL_server=${{ SQL_server }}\n\nEXPOSE 443\n\nCMD [ "node", "index.js" ]' > Dockerfile
+          cat Dockerfile
           docker build -t olliedev/urk-farma:${{ env.az_v_docker }} .
           docker tag olliedev/urk-farma:${{ env.az_v_docker }} urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
           docker push urkfarma.azurecr.io/urk-farma:${{ env.az_v_docker }}
