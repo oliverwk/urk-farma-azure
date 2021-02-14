@@ -4,7 +4,7 @@ print(sys.argv)
 if len(sys.argv) > 3:
     for file in ["cert.pem", "privkey.pem", "ca.pem"]:
          file = open(file, "w")
-         file.writelines(sys.argv[i])
+         file.writelines(sys.argv[i].replace("%20"," "))
          file.close()
          i += 1
 else:
