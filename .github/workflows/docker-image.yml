@@ -54,12 +54,5 @@ jobs:
           azcliversion: 2.17.1
           inlineScript: |
             az container create --resource-group urk-frama --name urk-farma --image urkfarma.azurecr.io/urk-farma:${az_v_docker} --cpu 1 --memory 1 --registry-login-server ${{ secrets.REGISTRY_URL }} --registry-username ${{ secrets.REGISTRY_USERNAME }} --registry-password ${{ secrets.REGISTRY_PASSWORD }} --dns-name-label urk-farma --ports 443 --out table
-      
-      - uses: fastai/workflows/ssh@master
-        with:
-          ssh_key: ${{ secrets.SSH_KEY }}
-          key_file: id_ecdsa
-      - uses: actions/checkout@v2
-      - run: source script-linux.sh
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@master
