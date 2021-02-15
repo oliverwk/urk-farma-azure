@@ -211,6 +211,13 @@ app.post('/api/urk/update', async (req, res) => {
 	let sql_qeury = "";
 	let ikeys = "";
 	const prod_null = "-";
+	try {
+		let jbody = JSON.parse(req.body);
+	} catch (e) {
+		console.log("No body or not good");
+		res.header('x-error',' Didn\'t have a body');
+		res.sendStatus(400);
+	}
 	console.log("Got body: ", req.body);
 		if (!!req.body) {
 			 JSON.parse(req.body).forEach((item, i) => {
@@ -264,10 +271,9 @@ app.post('/api/urk/update', async (req, res) => {
 		 return false;
 	 }
 	console.log(sql_qeury);
-	data = [];
-	knex.raw(sql_qeury)
-	res.header('rowCount', rowCount);
-	console.log(rowCount + ' rows');
+	let resualt = await knex.raw(sql_qeury);
+	console.log(resualt);
+	res.header('rowCount', 0);
 	console.log("complete, de sql server is geupdate.");
 	console.log("Send the response at: "+new Date().toString());
 	res.sendStatus(200);
