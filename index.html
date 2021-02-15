@@ -249,7 +249,7 @@
      x.setAttribute("style", "object-fit:contain;");
   }
 
-  var omschrijvingen = []
+  let omschrijvingen = []
   async function LoadData(url) {
     const response = await fetch(url)
     var respr = await response.json();

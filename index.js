@@ -23,7 +23,16 @@ async function digest(data, algorithm = 'SHA-512') {
 
 let data = [];
 const app = express()
-app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+			"defaultSrc": ["'self'", "www.wittopkoning.nl", "wittopkoning.nl"],
+      "script-src": ["'self'", "'unsafe-inline'"],
+			"style-src" : ["'self'", "'unsafe-inline'"],
+			"img-src"   : ["'self'", "www.wittopkoning.nl"],
+			"font-src"  : ["'self'", "www.wittopkoning.nl"],
+    },
+  })
+);
 app.use(cors());
 app.use(bodyParser.text({ type: "*/*" }));
 
@@ -34,8 +43,8 @@ app.get('/api/urk/top', async (req, res) => {
 			 res.header('Content-Type','application/json');
 			 let limit;
 			 let vanaf;
-			 let categorieDB;
 			 let sortby;
+			 let categorieDB;
  		 	 let sorteerrichting;
 			 if (req.query.categorieDB) {
 					if (String(req.query.categorieDB).toUpperCase() === "objecten".toUpperCase()) {
@@ -44,7 +53,11 @@ app.get('/api/urk/top', async (req, res) => {
 					} else if (String(req.query.categorieDB).toUpperCase() === "boeken".toUpperCase()) {
 						categorieDB = "[dbo].[Boeken]";
 						console.log("[LOG] The entered categorie is Boeken so we will use [dbo].[Boeken].");
-			 }
+			   } else {
+	 				categorieDB = "[dbo].[Objecten]";
+	 				res.header('x-warning',' Didn\'t enter a categorie we will just use Objecten');
+	 				console.log("[WARNING] Didn't enter a categorie we will just use Objecten.");
+	 			}
 			} else {
 				categorieDB = "[dbo].[Objecten]";
 				res.header('x-warning',' Didn\'t enter a categorie we will just use Objecten');
