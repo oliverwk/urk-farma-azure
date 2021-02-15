@@ -30,11 +30,11 @@ jobs:
         run: |
            mkdir -p tls
            python3 GetCert.py ${{ secrets.cert }} ${{ secrets.privkey }} ${{ secrets.ca }}
-           /bin/ls
+           /bin/ls -lash
            printf "\n\ndividerline\n\n"
-           /bin/ls tls
+           /bin/ls tls -lash
       - name: Ceck ssl cert
-        run : openssl x509 -in tls/cert.pem -text -noout
+        run : echo "doesn't work'"#openssl x509 -in tls/cert.pem -text -noout
       - name: Docker Login 
         uses: azure/docker-login@v1
         with:
