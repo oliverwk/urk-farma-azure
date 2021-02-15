@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sys
-i = 0
+i = 1
 print("Hoeveelheid argumenten:", len(sys.argv))
 if len(sys.argv) > 3:
     for file in ["cert.pem", "privkey.pem", "ca.pem"]:
