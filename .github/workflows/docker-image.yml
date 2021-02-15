@@ -1,4 +1,4 @@
-name: Push Docker Image to Azure and deploy to Azure
+name: Build, Push en Deploy Docker Image to Azure
 
 on:
   push:
@@ -54,5 +54,5 @@ jobs:
           azcliversion: 2.17.1
           inlineScript: |
             az container create --resource-group urk-frama --name urk-farma --image urkfarma.azurecr.io/urk-farma:${az_v_docker} --cpu 1 --memory 1 --registry-login-server ${{ secrets.REGISTRY_URL }} --registry-username ${{ secrets.REGISTRY_USERNAME }} --registry-password ${{ secrets.REGISTRY_PASSWORD }} --dns-name-label urk-farma --ports 443 --out table
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@master
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@master
