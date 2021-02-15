@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.wittopkoning.nl/urk">
+  <meta name="description" content="De website met een hele colectie van dingen"/>
+  <meta property="og:description" content="De website met een hele colectie van dingen"/>
+    <meta property="og:title" content="urk-farma test site - wttpknng"/>
+    <link rel="apple-touch-startup-image" href="https://www.wittopkoning.nl/wttp_logo.png">
+    <meta name="theme-color" content="#d3a020">
+    <link rel="shortcut icon" href="https://www.wittopkoning.nl/wttp_logo.png">
+    <meta property="og:image:secure_url" content="https://www.wittopkoning.nl/urk/brand.png"/>
+    <meta property="og:image:alt" content="coming soon"/>
+    <meta property="og:image" content="https://www.wittopkoning.nl/urk/brand.png"/>
+    <meta property="og:type" content="website"/>
+    <meta rel=canonical property="og:url" content="https://www.wittopkoning.nl/urk"/>
+    <meta http-equiv="Cache-control" content="public, max-age=604800">
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://urk.wittopkoning.nl">
+    <link rel="preconnect" href="https://www.wittopkoning.nl/urk">
+    <title>urk test site</title>
+    <style media="screen">
+    a {
+        text-decoration: none;
+    }
+    li {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+    .grid-container {
+      position: relative;
+      width: 95%;
+      height: 100%;
+    }
+    .maintext {
+      font-size:12vw;
+      text-shadow: 0px 0px 4px #FFF;
+      color: black;
+      font-family: 'Sofia';
+      font-weight: 700;
+      font-style: normal;
+      font-stretch: normal;
+    }
+    .input-text {
+        width:85%;
+        background-color: white;
+        font-size: 5vw;
+    }
+    input[type=text] {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      border: 10px solid white;
+      background-color: white;
+      border-radius: 4px;
+    }
+    input[type=radio] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+
+      border: 2px solid #0e918c;
+      transition: 0.2s all linear;
+      margin-right: 5px;
+
+      position: relative;
+      top: 4px;
+      color: black;
+
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+    }
+    input:checked {
+      border: 5.5px solid #0e918c;
+    }
+      @media only screen and (max-width: 768px) {
+    .grid-container  .Overlay {
+          position: absolute;
+          text-align: center;
+          align: center;
+          left: 10%;
+          margin-top: 25%;
+          font-size:12vw;
+          text-shadow: 0px 0px 4px #FFF;
+          color: black;
+          font-family: 'Sofia';
+          font-weight: 700;
+          font-style: normal;
+          font-stretch: normal;
+      }
+    }
+      @font-face {
+        font-weight: 700;
+        font-style: normal;
+        font-stretch: normal;
+        font-family: 'Sofia';
+        font-display: swap;
+        src: url('https://www.wittopkoning.nl/urk/sofia700.woff') format('woff');
+      }
+
+    .grid-container  .imgs {
+        padding: 10px;
+        width:95%;
+        border-radius: 25px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        align: center;
+        height: auto;
+        /*object-fit: cover;*/
+        overflow: hidden;
+      }
+
+      @media only screen and (min-width: 768px) {
+        /* for Desktop  */
+        #list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-flow: dense;  /* or 'row', 'row dense', 'column dense' */
+            grid-gap: 0px;
+
+          }
+          * {
+            box-sizing: border-box;
+          }
+          .div {
+            line-height: 0;
+          }
+            .Overlay {
+                position: relative;
+                text-align: center;
+                text-transform: capitalize;
+                word-break: keep-all;
+                line-height: normal;
+                font-size: 40px;
+                top: 25vh;
+                text-shadow: 0px 0px 4px #FFF;
+                color: black;
+                font-family: 'Sofia';
+                font-weight: 700;
+                margin: 10px;
+            }
+            .maintext {
+              font-size:10vh;
+              text-shadow: 0px 0px 4px #FFF;
+              color: black;
+              font-family: 'Sofia';
+              font-weight: 700;
+              font-style: normal;
+              font-stretch: normal;
+            }
+            .input-text {
+                width:65%;
+                background-color: white;
+                font-size: 5vh;
+            }
+      }
+      .button-submit {
+	position: absolute;
+	left: 50%;
+	bottom: 0px;
+	transform: translate(-50%, -50%);
+	padding: 16px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 16px;
+	transition-duration: 0.4s;
+	border-radius: 15px;
+	background-color: white;
+	border: 2px solid #0e918c;
+      }
+
+      .button-submit:hover {
+        background-color: #0e918c;
+        color: white;
+        box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+      }
+    </style>
+  </head>
+  <body id="body" class="grid-container">
+    <a href="https://www.wittopkoning.nl/urk"> <h1 class="maintext">Urk-Farma</h1> </a>
+    <br>
+      <input class="input-text" type="text" id="search" name="search" accept="text/plain" autofocus placeholder="type uw zoek woord in" alt="type uw zoek woord hier in" >
+      <label for="search" hidden >type uw zoek woord hier in</label>
+      <div id="categorien">
+        <input type="radio" checked name="categorie" id="Omschrijving">Omschrijving
+        <input type="radio" name="categorie" id="Locatie">Locatie
+        <input type="radio" name="categorie" id="Categorie">Categorie
+        <input type="radio" name="categorie" id="GPK">GPK
+        <input type="radio" name="categorie" id="Inhoud">Inhoud
+        <input type="radio" name="categorie" id="Producent">Producent
+        <input type="radio" name="categorie" id="Eigenaar">Eigenaar
+        <input type="radio" name="categorie" id="FotoNR">FotoNR
+      </div>
+    <br>
+    <br>
+    <ul id="list">
+      <li hidden></li>
+    </ul>
+
+  </body>
+    <button onclick="LoadData('https://urk.wittopkoning.nl/api/urk/top?limit=180&vanaf=60&categorieDB='+localStorage.getItem('table')')" class="button-submit" type="button" name="button">Laad meer</button>
+  <script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", event => {
+    var body = document.getElementById('body');
+    var ul = document.createElement("ul");
+    ul.Id = "list";
+    LoadData("https://urk.wittopkoning.nl/api/urk/top?limit=50&vanaf=0&categorieDB="+localStorage.getItem("table"))
+  });
+  var inpt_el = document.getElementById('search')
+  inpt_el.addEventListener("keydown", function(e) {
+      if (e.keyCode === 13) {
+          console.log("enter: ",document.getElementById('search').value);
+          var categorien = document.querySelectorAll("[id=categorien] > input");
+          clear()
+          for (var i = 0; i < categorien.length; i++) {
+            categorii = categorien[i]
+            if (categorii.checked) {
+              console.log("Is checked: "+categorii.getAttribute("id"));
+              localStorage.setItem('categorie', categorii.getAttribute("id"));
+              LoadData("https://urk.wittopkoning.nl/api/urk/name?name="+document.getElementById('search').value+"&categorieDB="+localStorage.getItem('table')+"&categorie="+categorii.getAttribute("id"))
+              i = categorien.length + 1;
+            } else {
+              console.log("Isn't checked: "+categorii.getAttribute("id"));
+            }
+          }
+      }
+  });
+
+  async function clear() {
+     var list = document.getElementById("list");
+     var body =   document.getElementById("body")
+      list.setAttribute("id", "old_list");
+      list.setAttribute("hidden", "");
+      body.appendChild(list);
+      var old_list = document.getElementById("old_list");
+      old_list.remove()
+      var list_new = document.createElement("ul");
+      list_new.setAttribute("id", "list");
+      body.appendChild(list_new);
+  }
+  function contain(x) {
+     x.setAttribute("style", "object-fit:contain;");
+  }
+
+  var omschrijvingen = []
+  async function LoadData(url) {
+    const response = await fetch(url)
+    var respr = await response.json();
+    var datajs = await JSON.parse(await JSON.stringify(respr));
+    console.log("Recieved the request.");
+    for (var i = 0; i < datajs.length; i++) {
+        var list = document.getElementById('list');
+        var div = document.createElement("li");
+        div.className = "div";
+        div.setAttribute("name", await JSON.stringify(datajs[i].Omschrijving).replace(" ", "-"));
+        div.setAttribute("href", await JSON.stringify(datajs[i].Omschrijving).replace(" ", "-"));
+        div.setAttribute("id", i);
+        list.appendChild(div);
+        var text = document.createElement("p");
+        text.className = "Overlay";
+        text.innerHTML = datajs[i].Omschrijving;
+        omschrijvingen.push(datajs[i].Omschrijving)
+        div.appendChild(text);
+        var picture = document.createElement("picture");
+        picture.className = "lazy-picture";
+        div.appendChild(picture);
+        var source = document.createElement("source");
+        source.setAttribute("type", "image/webp");
+        if (datajs[i]["FotoNr"]) {
+            source.setAttribute("onmouseover", "contain(this)");
+            source.setAttribute("srcset", "https://www.wittopkoning.nl/urk/urk-fotos-webp/"+datajs[i]["FotoNr"]+".webp");
+        } else {
+            console.warn("null found");
+        }
+        picture.appendChild(source)
+        var image = document.createElement("img");
+        image.setAttribute("onmouseover", "contain(this)");
+        image.className = "imgs";
+        image.alt = "Afbeelding met farma dingen er in.";
+        if (datajs[i]["FotoNr"]) {
+              image.src = "https://www.wittopkoning.nl/urk/urk-fotos/"+datajs[i]["FotoNr"]+".jpg";
+        } else {
+            console.warn("null found");
+        }
+        picture.appendChild(image);
+        var imgs = document.getElementsByClassName('imgs');
+
+      }
+      loaded = true;
+  }
+  </script>
+</html>

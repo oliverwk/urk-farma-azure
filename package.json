@@ -1,15 +1,15 @@
 {
-  "name": "mach",
-  "version": "4.2.1",
-  "description": "",
+  "name": "urk-farma rest-api",
+  "version": "4.4.0",
+  "description": "A restful Node.js api using for the urk-frama project",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
   "author": "oliverwk",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^4.4.1",

@@ -1,4 +1,4 @@
-name: Push Docker Image to Azure and deploy to Azure
+name: Build, Push and Deploy Docker Image to Azure
 
 on:
   push:
@@ -26,7 +26,13 @@ jobs:
               export az_v_docker="2.$((${arrIN[1]}+1))"
               echo "Pushing version ${az_v_docker}"
               echo "az_v_docker=${az_v_docker}" >> $GITHUB_ENV
-      - name: Docker Login
+      - name: Get certifcate from secret store
+        run: |
+           mkdir -p tls
+           python3 GetCert.py ${{ secrets.cert }} ${{ secrets.privkey }} ${{ secrets.ca }}
+      - name: Ceck ssl cert
+        run : openssl x509 -in tls/cert.pem -text -noout
+      - name: Docker Login 
         uses: azure/docker-login@v1
         with:
             login-server: ${{ secrets.REGISTRY_URL }}
@@ -45,3 +51,5 @@ jobs:
           azcliversion: 2.17.1
           inlineScript: |
             az container create --resource-group urk-frama --name urk-farma --image urkfarma.azurecr.io/urk-farma:${az_v_docker} --cpu 1 --memory 1 --registry-login-server ${{ secrets.REGISTRY_URL }} --registry-username ${{ secrets.REGISTRY_USERNAME }} --registry-password ${{ secrets.REGISTRY_PASSWORD }} --dns-name-label urk-farma --ports 443 --out table
+      #- name: Setup tmate session
+      #  uses: mxschmitt/action-tmate@master

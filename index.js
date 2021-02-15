@@ -1,10 +1,11 @@
-let express  = require('express');
-let https    = require('https');
-let helmet   = require('helmet');
-let cors 		 = require('cors');
-let fs 			 = require('fs');
-let crypto   = require('crypto').webcrypto;
-let knex     = require('knex')({
+let express    = require('express');
+let https      = require('https');
+let helmet     = require('helmet');
+let cors 		   = require('cors');
+let bodyParser = require('body-parser');
+let fs 			   = require('fs');
+let crypto     = require('crypto').webcrypto;
+let knex       = require('knex')({
   client: 'mssql',
   connection: {
 		host : process.env.SQL_server,
@@ -24,6 +25,7 @@ let data = [];
 const app = express()
 app.use(helmet());
 app.use(cors());
+app.use(bodyParser.text({ type: "*/*" }));
 
 app.get('/api/urk/top', async (req, res) => {
 		   console.log("Got a reqeust at: "+new Date().toString());
@@ -206,7 +208,7 @@ app.post('/api/urk/update', async (req, res) => {
 		 		  res.sendStatus(400);
 					console.log("[WARNING] Didn't enter a categorie.");
 				}
-	var sql_qeury = "";
+	let sql_qeury = "";
 	let ikeys = "";
 	const prod_null = "-";
 	console.log("Got body: ", req.body);
@@ -229,7 +231,7 @@ app.post('/api/urk/update', async (req, res) => {
 							ikeys = ikeys.trim().replace(/.$/,"");
 
 							 vals = "";
-               var nns;
+               let nns;
 				 			 for (var tkey of Object.keys(item)) {
 				 					 nns = item[tkey] == "" || item[tkey] == null || item[tkey] == prod_null ? null : "'"+item[tkey]+"'";
                    console.log("tkey: "+tkey, "value: "+item[tkey]+" nns: "+nns);
@@ -247,7 +249,7 @@ app.post('/api/urk/update', async (req, res) => {
 				vaels = "";
 				for (var titem of Object.keys(item)) {
 					var nn = item[titem] == null || item[titem] === prod_null ? null : "'"+item[titem]+"'";
-					if (titem.includes(" ")) {return}
+					if (titem.includes(" ")) {res.sendStatus(400)}
 					titem == "Id" ? console.log("Is id:", item[titem]) : vaels += titem+" = "+nn+" , ";
 				}
 				 vaels = vaels.trim().replace(/.$/,"");
@@ -270,9 +272,14 @@ app.post('/api/urk/update', async (req, res) => {
 	console.log("Send the response at: "+new Date().toString());
 	res.sendStatus(200);
 });
+app.get('/', (req, res) => {
+    fs.readFile('index.html',(err, data) => {
+        res.status(200).send(data.toString());
+    });
+});
 
-app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 4.3}") })
-app.get('/api/urk/status', (req, res) => { res.status(200).send("{\"status\": 200, \"time\" : "+new Date().toString()+"}") })
+app.get('/api/urk/version', (req, res) => { res.status(200).send("{\"version\": 4.4}") })
+app.get('/api/urk/status', (req, res) => { res.status(200).send("{\"status\": 200, \"time\" : \""+new Date().toString()+"\" }") })
 const privateKey = fs.readFileSync('./tls/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('./tls/cert.pem', 'utf8');
 const ca = fs.readFileSync('./tls/ca.pem', 'utf8');
