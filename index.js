@@ -174,8 +174,7 @@ app.get('/api/urk/name', async (req, res) => {
 	 								sorteerrichting = "ASC";
 	 								console.log("Je hoeft niet te sorteren");
 	 				}
-
-				 let lqs = await knex.select('*').from(categorieDB).whereRaw("? LIKE \'%??%\'", [categorie, name]).orderBy(sortby, sorteerrichting).limit(limit);
+				 let lqs = await knex.select('*').from(categorieDB).where(categorie, 'LIKE', `%${name}%`).orderBy(sortby, sorteerrichting).limit(limit);
 				 res.header('rowCount', lqs.length);
 				 console.log(lqs.length, 'rows');
 				 complete(lqs, lqs.length);
